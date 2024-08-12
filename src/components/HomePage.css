@@ -1,0 +1,30 @@
+.home-page {
+    text-align: center;
+    padding: 50px;
+    background-color: #fafafa;
+}
+
+.home-header {
+    max-width: 600px;
+    margin: auto;
+}
+
+.home-title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.home-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+}
+
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.home-button {
+    padding: 10px 20px;
+}

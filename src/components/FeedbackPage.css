@@ -1,0 +1,9 @@
+/* src/components/FeedbackPage.css */
+.feedback-page {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.feedback-page .MuiTextField-root {
+    margin: 1rem 0;
+}

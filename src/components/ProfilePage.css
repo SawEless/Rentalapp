@@ -1,0 +1,46 @@
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #f5f5f5;
+    min-height: 100vh;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.profile-pic-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    border: 2px solid #007bff;
+}
+
+.profile-info {
+    width: 100%;
+    max-width: 600px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info .MuiTextField-root {
+    margin-bottom: 20px;
+}
+
+.profile-info .MuiButton-root {
+    margin-top: 10px;
+}

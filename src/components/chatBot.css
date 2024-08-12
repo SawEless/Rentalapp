@@ -1,0 +1,11 @@
+/* src/components/ChatBot.css */
+.chat-bot {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.chat-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
