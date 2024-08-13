@@ -1,10 +1,23 @@
-import React from 'react';
-import { TextField, Button, Box, Typography, InputAdornment } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Box, Typography, InputAdornment, CircularProgress } from '@mui/material';
 import { motion } from 'framer-motion';
-import { Email, Lock } from '@mui/icons-material';
+import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleLogin = () => {
+        setLoading(true);
+        // Simulate login process
+        setTimeout(() => {
+            setLoading(false);
+            // Navigate to dashboard or handle login
+        }, 2000);
+    };
+
     return (
         <Box
             display="flex"
@@ -12,6 +25,9 @@ const LoginPage = () => {
             alignItems="center"
             minHeight="100vh"
             bgcolor="#f0f2f5"
+            style={{
+                background: 'linear-gradient(135deg, #f0f2f5 30%, #ffffff 90%)',
+            }}
         >
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
@@ -24,9 +40,14 @@ const LoginPage = () => {
                     boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.1)',
                     maxWidth: '400px',
                     width: '100%',
+                    position: 'relative',
                 }}
             >
-                <Box display="flex" justifyContent="center" marginBottom={4}>
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    marginBottom={4}
+                >
                     <motion.img
                         src="https://img.icons8.com/clouds/100/000000/car.png"
                         alt="logo"
@@ -52,21 +73,42 @@ const LoginPage = () => {
                                 <Email style={{ color: '#3f51b5' }} />
                             </InputAdornment>
                         ),
+                        style: { transition: '0.3s' },
+                        onFocus: (e) => e.target.style.borderColor = '#3f51b5',
+                        onBlur: (e) => e.target.style.borderColor = '#ccc',
                     }}
                     InputLabelProps={{
                         style: { color: '#3f51b5' },
+                    }}
+                    sx={{ 
+                        '& .MuiOutlinedInput-root': {
+                            transition: 'border-color 0.3s',
+                        },
                     }}
                 />
                 <TextField
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
                                 <Lock style={{ color: '#3f51b5' }} />
+                            </InputAdornment>
+                        ),
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <motion.div
+                                    whileHover={{ scale: 1.2 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={handleClickShowPassword}
+                                    style={{ cursor: 'pointer' }}
+                                    aria-label="toggle password visibility"
+                                >
+                                    {showPassword ? <VisibilityOff style={{ color: '#3f51b5' }} /> : <Visibility style={{ color: '#3f51b5' }} />}
+                                </motion.div>
                             </InputAdornment>
                         ),
                     }}
@@ -80,13 +122,16 @@ const LoginPage = () => {
                             marginTop: '20px',
                             padding: '10px 0',
                             fontSize: '16px',
-                            backgroundColor: '#3f51b5',
+                            background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
                             color: '#fff',
                             borderRadius: '10px',
                             textTransform: 'none',
+                            position: 'relative',
                         }}
+                        onClick={handleLogin}
+                        disabled={loading}
                     >
-                        Login
+                        {loading ? <CircularProgress size={24} style={{ color: '#fff' }} /> : 'Login'}
                     </Button>
                 </motion.div>
                 <Box display="flex" justifyContent="space-between" marginTop={2}>

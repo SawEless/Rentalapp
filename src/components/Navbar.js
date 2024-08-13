@@ -1,38 +1,46 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import './Navbar.css';
 
 const Navbar = () => {
     return (
-        <motion.div
-            initial={{ y: -60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-        >
-            <AppBar position="static" style={{ backgroundColor: '#2c3e50' }}>
-                <Toolbar>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Vehicle Rental
-                    </Typography>
-                    <Button color="inherit" component={Link} to="/" className="nav-link">
-                        Home
-                    </Button>
-                    <Button color="inherit" component={Link} to="/about" className="nav-link">
-                        About
-                    </Button>
-                    <Button color="inherit" component={Link} to="/services" className="nav-link">
-                        Services
-                    </Button>
-                    <Button color="inherit" component={Link} to="/contact" className="nav-link">
-                        Contact
-                    </Button>
-                    <Button color="inherit" component={Link} to="/login" className="nav-link">
-                        Login
-                    </Button>
-                </Toolbar>
-            </AppBar>
-        </motion.div>
+        <nav className="navbar">
+            <div className="navbar-container">
+                <Link to="/" className="navbar-logo">
+                    YourAppName
+                </Link>
+                <div className="menu-icon">
+                    <i className="fas fa-bars"></i>
+                </div>
+                <ul className="nav-menu">
+                    <li className="nav-item">
+                        <Link to="/" className="nav-links">
+                            Home
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/services" className="nav-links">
+                            Services
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/aboutus" className="nav-links">
+                            About Us
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/contact" className="nav-links">
+                            Contact
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/login" className="nav-links">
+                            Login
+                        </Link>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     );
 };
 

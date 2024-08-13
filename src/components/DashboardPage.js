@@ -1,215 +1,166 @@
 import React from 'react';
-import { Container, Grid, Paper, Typography, Avatar, IconButton, AppBar, Toolbar, Box } from '@mui/material';
+import { Box, Typography, Grid, Paper, IconButton, Card, CardContent, Divider } from '@mui/material';
 import { motion } from 'framer-motion';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { AccountCircle, Settings, Notifications, TrendingUp, AttachMoney, Person, Dashboard, Task } from '@mui/icons-material';
+import { FaUsers, FaChartLine, FaCalendar, FaDollarSign, FaCog, FaPowerOff } from 'react-icons/fa';
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
 // Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend);
+
+// Sample chart data
+const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [
+        {
+            label: 'Sales',
+            data: [30, 45, 60, 70, 80, 90],
+            borderColor: '#3f51b5',
+            backgroundColor: 'rgba(63, 81, 181, 0.2)',
+            fill: true,
+        },
+    ],
+};
 
 const DashboardPage = () => {
-    const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-        datasets: [
-            {
-                label: 'Revenue',
-                data: [12000, 15000, 8000, 18000, 22000, 20000, 25000],
-                backgroundColor: '#3f51b5',
-                borderColor: '#3f51b5',
-                borderWidth: 2,
-                borderRadius: 5,
-                barThickness: 20,
-            },
-        ],
-    };
-
-    const options = {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false,
-            },
-            tooltip: {
-                callbacks: {
-                    label: function (tooltipItem) {
-                        return `$${tooltipItem.raw.toLocaleString()}`;
-                    },
-                },
-            },
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: false,
-                },
-            },
-            y: {
-                beginAtZero: true,
-                grid: {
-                    drawBorder: false,
-                    color: '#e0e0e0',
-                },
-                ticks: {
-                    callback: (value) => `$${value / 1000}k`,
-                },
-            },
-        },
-    };
-
     return (
-        <Container>
-            {/* Navbar */}
-            <motion.div
-                className="dashboard-navbar"
-                initial={{ y: -60, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
-            >
-                <AppBar position="static" sx={{ backgroundColor: '#2c3e50' }}>
-                    <Toolbar>
-                        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                            Vehicle Rental Dashboard
-                        </Typography>
-                        <IconButton color="inherit">
-                            <Dashboard />
-                        </IconButton>
-                        <IconButton color="inherit">
-                            <Task />
-                        </IconButton>
-                        <IconButton color="inherit">
-                            <AccountCircle />
-                        </IconButton>
-                        <IconButton color="inherit">
-                            <Notifications />
-                        </IconButton>
-                        <IconButton color="inherit">
-                            <Settings />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-            </motion.div>
+        <Box sx={{ p: 3, bgcolor: '#f5f5f5' }}>
+            <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+                Dashboard
+            </Typography>
 
-            {/* Taskbar */}
-            <motion.div
-                className="taskbar"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                style={{ marginTop: '20px', marginBottom: '20px' }}
-            >
-                <Paper elevation={3} sx={{ padding: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h6">Tasks Overview</Typography>
-                    <Box>
-                        <IconButton color="primary" sx={{ marginRight: 1 }}>
-                            <Task />
-                        </IconButton>
-                        <IconButton color="secondary">
-                            <Settings />
-                        </IconButton>
-                    </Box>
-                </Paper>
-            </motion.div>
-
-            {/* Dashboard Overview */}
-            <motion.div
-                className="dashboard-header"
-                initial={{ opacity: 0, y: -30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-            >
-                <Typography variant="h3" align="center" gutterBottom>
-                    Dashboard Overview
-                </Typography>
-            </motion.div>
-
-            <Grid container spacing={4}>
-                <Grid item xs={12} md={6} lg={4}>
+            {/* Dashboard Widgets */}
+            <Grid container spacing={3}>
+                <Grid item xs={12} sm={6} md={3}>
                     <motion.div
-                        className="dashboard-card"
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
                     >
-                        <Paper elevation={4} className="dashboard-card-content">
-                            <IconButton color="primary">
-                                <TrendingUp fontSize="large" />
+                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+                            <CardContent>
+                                <Typography variant="h6" color="textSecondary">
+                                    Users
+                                </Typography>
+                                <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                                    1,234
+                                </Typography>
+                            </CardContent>
+                            <IconButton sx={{ color: '#3f51b5' }}>
+                                <FaUsers size={30} />
                             </IconButton>
-                            <Typography variant="h6">Total Revenue</Typography>
-                            <Typography variant="h4">$120,000</Typography>
-                        </Paper>
+                        </Card>
                     </motion.div>
                 </Grid>
 
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} sm={6} md={3}>
                     <motion.div
-                        className="dashboard-card"
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        <Paper elevation={4} className="dashboard-card-content">
-                            <IconButton color="secondary">
-                                <AttachMoney fontSize="large" />
+                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+                            <CardContent>
+                                <Typography variant="h6" color="textSecondary">
+                                    Revenue
+                                </Typography>
+                                <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                                    $12,345
+                                </Typography>
+                            </CardContent>
+                            <IconButton sx={{ color: '#3f51b5' }}>
+                                <FaDollarSign size={30} />
                             </IconButton>
-                            <Typography variant="h6">Earnings</Typography>
-                            <Typography variant="h4">$75,000</Typography>
-                        </Paper>
+                        </Card>
                     </motion.div>
                 </Grid>
 
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} sm={6} md={3}>
                     <motion.div
-                        className="dashboard-card"
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
                     >
-                        <Paper elevation={4} className="dashboard-card-content">
-                            <IconButton color="primary">
-                                <Person fontSize="large" />
+                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+                            <CardContent>
+                                <Typography variant="h6" color="textSecondary">
+                                    Appointments
+                                </Typography>
+                                <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                                    567
+                                </Typography>
+                            </CardContent>
+                            <IconButton sx={{ color: '#3f51b5' }}>
+                                <FaCalendar size={30} />
                             </IconButton>
-                            <Typography variant="h6">New Users</Typography>
-                            <Typography variant="h4">350</Typography>
-                        </Paper>
+                        </Card>
                     </motion.div>
                 </Grid>
 
-                <Grid item xs={12} lg={8}>
+                <Grid item xs={12} sm={6} md={3}>
                     <motion.div
-                        className="dashboard-card"
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
                     >
-                        <Paper elevation={4} className="dashboard-chart">
-                            <Typography variant="h6" align="left" gutterBottom>
-                                Revenue Overview
-                            </Typography>
-                            <Bar data={data} options={options} />
-                        </Paper>
-                    </motion.div>
-                </Grid>
-
-                <Grid item xs={12} lg={4}>
-                    <motion.div
-                        className="dashboard-card"
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <Paper elevation={4} className="dashboard-profile">
-                            <Avatar sx={{ width: 120, height: 120, marginBottom: 2 }} />
-                            <Typography variant="h5">John Doe</Typography>
-                            <Typography variant="body1" color="textSecondary">
-                                Admin
-                            </Typography>
-                            {/* Removed View Profile Button */}
-                        </Paper>
+                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+                            <CardContent>
+                                <Typography variant="h6" color="textSecondary">
+                                    Settings
+                                </Typography>
+                            </CardContent>
+                            <IconButton sx={{ color: '#3f51b5' }}>
+                                <FaCog size={30} />
+                            </IconButton>
+                        </Card>
                     </motion.div>
                 </Grid>
             </Grid>
-        </Container>
+
+            {/* Chart Section */}
+            <Box sx={{ mt: 4 }}>
+                <Typography variant="h5" gutterBottom>
+                    Sales Overview
+                </Typography>
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <Line data={data} options={{ responsive: true, plugins: { legend: { display: false } } }} />
+                </Paper>
+            </Box>
+
+            {/* Actions Section */}
+            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="h5">
+                    Recent Activities
+                </Typography>
+                <IconButton>
+                    <MdKeyboardArrowDown />
+                </IconButton>
+            </Box>
+
+            <Box sx={{ mt: 2 }}>
+                <Paper elevation={3} sx={{ p: 2 }}>
+                    <Typography variant="body1">
+                        User John Doe updated profile settings.
+                    </Typography>
+                    <Divider sx={{ my: 1 }} />
+                    <Typography variant="body1">
+                        Revenue report generated for Q2.
+                    </Typography>
+                    <Divider sx={{ my: 1 }} />
+                    <Typography variant="body1">
+                        New appointment scheduled with client.
+                    </Typography>
+                </Paper>
+            </Box>
+
+            {/* Logout Section */}
+            <Box sx={{ mt: 4, textAlign: 'right' }}>
+                <IconButton color="error">
+                    <FaPowerOff size={24} />
+                </IconButton>
+            </Box>
+        </Box>
     );
 };
 
