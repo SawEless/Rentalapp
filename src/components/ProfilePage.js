@@ -1,174 +1,272 @@
 import React, { useState } from 'react';
-import './ProfilePage.css';
-import { Button, TextField, Avatar, Typography, Divider, Grid } from '@mui/material';
-import { motion } from 'framer-motion';
-import { PhotoCamera } from '@mui/icons-material';
+import {
+    Box, Typography, Button, Divider, IconButton, Paper, Grid, Avatar, TextField, Switch, LinearProgress, MenuItem, Select, FormControl, InputLabel, List, ListItem, ListItemText, CircularProgress
+} from '@mui/material';
+import {
+    FaCamera, FaEdit, FaSave, FaBell, FaShieldAlt, FaChartLine, FaCog, FaMoon, FaSun, FaUserCheck, FaLink, FaChartPie, FaSync, FaUserFriends, FaLinkedin, FaTwitter, FaFacebook
+} from 'react-icons/fa';
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+
+// Dark Mode Toggle Component
+const DarkModeToggle = ({ darkMode, setDarkMode }) => (
+    <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
+        {darkMode ? <FaMoon /> : <FaSun />}
+    </IconButton>
+);
+
+// Theme Configuration
+const createAppTheme = (darkMode, themeColor) => createTheme({
+    palette: {
+        mode: darkMode ? 'dark' : 'light',
+        primary: {
+            main: themeColor,
+        },
+        background: {
+            default: darkMode ? '#121212' : '#f5f5f5',
+        },
+    },
+    components: {
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    padding: '20px',
+                    borderRadius: '16px',
+                    boxShadow: darkMode ? '0 4px 8px rgba(0, 0, 0, 0.4)' : '0 4px 8px rgba(0, 0, 0, 0.1)',
+                },
+            },
+        },
+    },
+});
 
 const ProfilePage = () => {
-    const [profilePic, setProfilePic] = useState('default-profile.jpg');
-    const [userName, setUserName] = useState('John Doe');
-    const [email, setEmail] = useState('john.doe@example.com');
-    const [phoneNumber, setPhoneNumber] = useState('123-456-7890');
-    const [address, setAddress] = useState('123 Main St, Anytown, USA');
-    const [bio, setBio] = useState('Lorem ipsum dolor sit amet.');
-    const [newProfilePic, setNewProfilePic] = useState(null);
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
+    const [themeColor, setThemeColor] = useState('#1976d2'); // Default color
+    const [profileCompletion, setProfileCompletion] = useState(70);
+    const [emailNotifications, setEmailNotifications] = useState(true);
+    const [smsNotifications, setSmsNotifications] = useState(false);
+    const [profileVisibility, setProfileVisibility] = useState(true);
+    const [twoFactorAuth, setTwoFactorAuth] = useState(false);
+    const theme = createAppTheme(darkMode, themeColor);
 
-    const handleFileChange = (e) => {
-        if (e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setProfilePic(event.target.result);
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    };
-
-    const handleUpdateProfile = () => {
-        // Handle profile update logic here
-        alert('Profile updated!');
-    };
-
-    const handleChangePassword = () => {
-        if (newPassword === confirmPassword) {
-            // Handle password change logic here
-            alert('Password changed successfully!');
-        } else {
-            alert('Passwords do not match.');
-        }
-    };
-
-    const handleDeleteAccount = () => {
-        // Handle account deletion logic here
-        alert('Account deleted!');
-    };
+    const handleEdit = () => setIsEditing(!isEditing);
 
     return (
-        <div className="profile-page">
-            <div className="profile-header">
-                <motion.h1 
-                    className="profile-title" 
-                    initial={{ opacity: 0, y: -50 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    transition={{ duration: 0.8 }}
-                >
-                    Profile
-                </motion.h1>
-                <div className="profile-pic-container">
-                    <Avatar 
-                        src={profilePic} 
-                        alt="Profile Picture" 
-                        sx={{ width: 120, height: 120 }}
-                        className="profile-pic"
-                    />
-                    <input 
-                        type="file" 
-                        id="profilePicInput" 
-                        accept="image/*" 
-                        onChange={handleFileChange} 
-                        style={{ display: 'none' }}
-                    />
-                    <label htmlFor="profilePicInput">
-                        <Button 
-                            variant="outlined" 
-                            color="primary" 
-                            component={motion.div}
-                            whileHover={{ scale: 1.1, boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)" }}
-                            whileTap={{ scale: 0.9 }}
-                            startIcon={<PhotoCamera />}
+        <ThemeProvider theme={theme}>
+            <Box
+                sx={{
+                    padding: 4,
+                    maxWidth: 1000,
+                    margin: '0 auto',
+                }}
+            >
+                {/* Dark Mode and Theme Color */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                    <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+                    <FormControl sx={{ minWidth: 120 }}>
+                        <InputLabel id="theme-color-label">Theme Color</InputLabel>
+                        <Select
+                            labelId="theme-color-label"
+                            id="theme-color-select"
+                            value={themeColor}
+                            onChange={(e) => setThemeColor(e.target.value)}
                         >
-                            Change Photo
-                        </Button>
-                    </label>
-                </div>
-            </div>
-            <div className="profile-info">
-                <TextField 
-                    label="Name" 
-                    variant="outlined" 
-                    margin="normal" 
-                    fullWidth 
-                    value={userName} 
-                    onChange={(e) => setUserName(e.target.value)} 
-                />
-                <TextField 
-                    label="Email" 
-                    variant="outlined" 
-                    margin="normal" 
-                    fullWidth 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                />
-                <TextField 
-                    label="Phone Number" 
-                    variant="outlined" 
-                    margin="normal" 
-                    fullWidth 
-                    value={phoneNumber} 
-                    onChange={(e) => setPhoneNumber(e.target.value)} 
-                />
-                <TextField 
-                    label="Address" 
-                    variant="outlined" 
-                    margin="normal" 
-                    fullWidth 
-                    value={address} 
-                    onChange={(e) => setAddress(e.target.value)} 
-                />
-                <TextField 
-                    label="Bio" 
-                    variant="outlined" 
-                    margin="normal" 
-                    fullWidth 
-                    multiline
-                    rows={4} 
-                    value={bio} 
-                    onChange={(e) => setBio(e.target.value)} 
-                />
-                <Divider sx={{ marginY: 2 }} />
-                <Typography variant="h6">Change Password</Typography>
-                <TextField 
-                    label="New Password" 
-                    type="password" 
-                    variant="outlined" 
-                    margin="normal" 
-                    fullWidth 
-                    value={newPassword} 
-                    onChange={(e) => setNewPassword(e.target.value)} 
-                />
-                <TextField 
-                    label="Confirm Password" 
-                    type="password" 
-                    variant="outlined" 
-                    margin="normal" 
-                    fullWidth 
-                    value={confirmPassword} 
-                    onChange={(e) => setConfirmPassword(e.target.value)} 
-                />
-                <Button 
-                    variant="contained" 
-                    color="secondary" 
-                    onClick={handleChangePassword} 
-                    component={motion.div}
-                    whileHover={{ scale: 1.1, boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)" }}
-                    whileTap={{ scale: 0.9 }}
-                >
-                    Change Password
-                </Button>
-                <Divider sx={{ marginY: 2 }} />
-                <Button 
-                    variant="contained" 
-                    color="error" 
-                    onClick={handleDeleteAccount} 
-                    component={motion.div}
-                    whileHover={{ scale: 1.1, boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)" }}
-                    whileTap={{ scale: 0.9 }}
-                >
-                    Delete Account
-                </Button>
-            </div>
-        </div>
+                            <MenuItem value="#1976d2">Blue</MenuItem>
+                            <MenuItem value="#388e3c">Green</MenuItem>
+                            <MenuItem value="#d32f2f">Red</MenuItem>
+                            <MenuItem value="#7b1fa2">Purple</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+
+                {/* Profile Completion Tracker */}
+                <Paper sx={{ mb: 3 }}>
+                    <Box sx={{ p: 2 }}>
+                        <Typography variant="h6">
+                            Profile Completion
+                        </Typography>
+                        <LinearProgress variant="determinate" value={profileCompletion} sx={{ mt: 2 }} />
+                        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                            {profileCompletion}% Complete
+                        </Typography>
+                    </Box>
+                </Paper>
+
+                <Paper>
+                    <Grid container spacing={3}>
+                        {/* Profile Picture */}
+                        <Grid item xs={12} md={4}>
+                            <Box sx={{ textAlign: 'center' }}>
+                                <Avatar
+                                    alt="Profile Picture"
+                                    src="https://via.placeholder.com/150"
+                                    sx={{ width: 150, height: 150, margin: '0 auto', mb: 2 }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    startIcon={<FaCamera />}
+                                    sx={{ mt: 2 }}
+                                    onClick={() => alert('Change Picture functionality coming soon!')}
+                                >
+                                    Change Picture
+                                </Button>
+                            </Box>
+                        </Grid>
+
+                        {/* Profile Information */}
+                        <Grid item xs={12} md={8}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Typography variant="h5" gutterBottom>
+                                    John Doe
+                                </Typography>
+                                <IconButton onClick={handleEdit} color="primary">
+                                    {isEditing ? <FaSave /> : <FaEdit />}
+                                </IconButton>
+                            </Box>
+                            {isEditing ? (
+                                <Box>
+                                    <TextField
+                                        fullWidth
+                                        label="Bio"
+                                        multiline
+                                        rows={3}
+                                        defaultValue="This is your bio"
+                                        sx={{ mb: 3 }}
+                                    />
+                                    <Button variant="contained" color="primary" onClick={() => setIsEditing(false)}>
+                                        Save
+                                    </Button>
+                                </Box>
+                            ) : (
+                                <Typography variant="body1">
+                                    This is your bio. Here you can write something about yourself.
+                                </Typography>
+                            )}
+                        </Grid>
+                    </Grid>
+                </Paper>
+
+                <Divider sx={{ my: 4 }} />
+
+                {/* Additional Features */}
+                <Grid container spacing={3}>
+                    {/* Notification Settings */}
+                    <Grid item xs={12} md={6}>
+                        <Paper>
+                            <Typography variant="h6" gutterBottom>
+                                <FaBell style={{ marginRight: 8 }} /> Notification Settings
+                            </Typography>
+                            <Box>
+                                <Typography variant="body1">Email Notifications</Typography>
+                                <Switch
+                                    checked={emailNotifications}
+                                    onChange={(e) => setEmailNotifications(e.target.checked)}
+                                />
+                            </Box>
+                            <Box sx={{ mt: 2 }}>
+                                <Typography variant="body1">SMS Notifications</Typography>
+                                <Switch
+                                    checked={smsNotifications}
+                                    onChange={(e) => setSmsNotifications(e.target.checked)}
+                                />
+                            </Box>
+                        </Paper>
+                    </Grid>
+
+                    {/* Privacy Settings */}
+                    <Grid item xs={12} md={6}>
+                        <Paper>
+                            <Typography variant="h6" gutterBottom>
+                                <FaShieldAlt style={{ marginRight: 8 }} /> Privacy Settings
+                            </Typography>
+                            <Box>
+                                <Typography variant="body1">Profile Visibility</Typography>
+                                <Switch
+                                    checked={profileVisibility}
+                                    onChange={(e) => setProfileVisibility(e.target.checked)}
+                                />
+                            </Box>
+                            <Box sx={{ mt: 2 }}>
+                                <Typography variant="body1">Two-Factor Authentication</Typography>
+                                <Switch
+                                    checked={twoFactorAuth}
+                                    onChange={(e) => setTwoFactorAuth(e.target.checked)}
+                                />
+                            </Box>
+                        </Paper>
+                    </Grid>
+
+                    {/* AI Recommendations */}
+                    <Grid item xs={12} md={6}>
+                        <Paper>
+                            <Typography variant="h6" gutterBottom>
+                                <FaChartLine style={{ marginRight: 8 }} /> AI Recommendations
+                            </Typography>
+                            <Typography variant="body1">
+                                Based on your recent activities, we recommend the following:
+                            </Typography>
+                            <ul>
+                                <li>Connect with industry professionals</li>
+                                <li>Join relevant groups and forums</li>
+                                <li>Update your profile with recent achievements</li>
+                            </ul>
+                        </Paper>
+                    </Grid>
+
+                    {/* Activity Feed */}
+                    <Grid item xs={12} md={6}>
+                        <Paper>
+                            <Typography variant="h6" gutterBottom>
+                                <FaSync style={{ marginRight: 8 }} /> Activity Feed
+                            </Typography>
+                            <List>
+                                <ListItem>
+                                    <ListItemText primary="Joined the 'Tech Enthusiasts' group" secondary="2 days ago" />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Updated profile picture" secondary="3 days ago" />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Added a new project to the portfolio" secondary="5 days ago" />
+                                </ListItem>
+                            </List>
+                        </Paper>
+                    </Grid>
+
+                    {/* Social Media Integration */}
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography variant="h6" gutterBottom>
+                                <FaUserFriends style={{ marginRight: 8 }} /> Social Media Integration
+                            </Typography>
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <IconButton color="primary" onClick={() => alert('LinkedIn integration coming soon!')}>
+                                    <FaLinkedin size={32} />
+                                </IconButton>
+                                <IconButton color="primary" onClick={() => alert('Twitter integration coming soon!')}>
+                                    <FaTwitter size={32} />
+                                </IconButton>
+                                <IconButton color="primary" onClick={() => alert('Facebook integration coming soon!')}>
+                                    <FaFacebook size={32} />
+                                </IconButton>
+                            </Box>
+                        </Paper>
+                    </Grid>
+
+                    {/* Profile Engagement Chart */}
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
+                                <CircularProgress variant="determinate" value={75} size={80} />
+                                <Typography variant="body1" sx={{ ml: 2 }}>
+                                    Profile Engagement: 75%
+                                </Typography>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Box>
+        </ThemeProvider>
     );
 };
 

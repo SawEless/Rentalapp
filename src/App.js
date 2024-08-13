@@ -9,7 +9,8 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import DashboardPage from './components/DashboardPage';
-import HomePage from './components/HomePage'; // Import the HomePage
+import ProfilePage from './components/ProfilePage'; // Import the ProfilePage
+import HomePage from './components/HomePage';
 import Footer from './components/Footer';
 import './App.css';
 
@@ -18,14 +19,15 @@ const App = () => {
         <Router>
             <Navbar />
             <Routes>
-                <Route path="/" element={<HomePage />} /> {/* Add the HomePage route */}
+                <Route path="/" element={<HomePage />} />
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/aboutus" element={<AboutUsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/dashboard" element={<DashboardPage />} /> {/* Dashboard route */}
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/profile" element={<ProfilePage />} /> {/* Add ProfilePage route */}
             </Routes>
             <Footer />
         </Router>

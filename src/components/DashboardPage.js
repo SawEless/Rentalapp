@@ -1,165 +1,219 @@
-import React from 'react';
-import { Box, Typography, Grid, Paper, IconButton, Card, CardContent, Divider } from '@mui/material';
-import { motion } from 'framer-motion';
-import { FaUsers, FaChartLine, FaCalendar, FaDollarSign, FaCog, FaPowerOff } from 'react-icons/fa';
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import React, { useState } from 'react';
+import { Box, Typography, Grid, Card, CardContent, Divider, IconButton, Tooltip } from '@mui/material';
+import { Line, Bar, Pie } from 'react-chartjs-2';
+import { useSpring, animated } from 'react-spring';
+import { FaChartLine, FaUserAlt, FaCog, FaDollarSign, FaCalendarAlt, FaBox, FaBell, FaSun, FaMoon } from 'react-icons/fa';
+import { Chart as ChartJS, Title, Tooltip as ChartTooltip, Legend, LineElement, BarElement, PointElement, CategoryScale, LinearScale, ArcElement } from 'chart.js';
 
 // Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+    Title,
+    ChartTooltip,
+    Legend,
+    LineElement,
+    PointElement,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    ArcElement
+);
 
-// Sample chart data
-const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+// Chart Data
+const lineChartData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
     datasets: [
         {
-            label: 'Sales',
-            data: [30, 45, 60, 70, 80, 90],
+            label: 'Monthly Rentals',
+            data: [30, 40, 35, 50, 60, 55, 65],
             borderColor: '#3f51b5',
             backgroundColor: 'rgba(63, 81, 181, 0.2)',
-            fill: true,
+            borderWidth: 2,
+            tension: 0.4,
         },
     ],
 };
 
+const barChartData = {
+    labels: ['North', 'South', 'East', 'West'],
+    datasets: [
+        {
+            label: 'Vehicle Rentals by Region',
+            data: [120, 150, 180, 110],
+            backgroundColor: ['#3f51b5', '#4caf50', '#ff5722', '#2196f3'],
+        },
+    ],
+};
+
+const pieChartData = {
+    labels: ['Sedans', 'SUVs', 'Trucks', 'Vans'],
+    datasets: [
+        {
+            label: 'Vehicle Types',
+            data: [40, 30, 20, 10],
+            backgroundColor: ['#3f51b5', '#4caf50', '#ff5722', '#2196f3'],
+        },
+    ],
+};
+
+// Animation setup
+const useAnimation = () => useSpring({
+    opacity: 1,
+    from: { opacity: 0 },
+    config: { duration: 1000 },
+});
+
 const DashboardPage = () => {
+    const [darkMode, setDarkMode] = useState(false);
+    const animationProps = useAnimation();
+
+    const handleDarkModeToggle = () => {
+        setDarkMode(prevMode => !prevMode);
+    };
+
     return (
-        <Box sx={{ p: 3, bgcolor: '#f5f5f5' }}>
-            <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
-                Dashboard
-            </Typography>
+        <Box sx={{ padding: 3, backgroundColor: darkMode ? '#121212' : '#f5f5f5', color: darkMode ? '#e0e0e0' : '#000' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h4" gutterBottom>
+                    Dashboard
+                </Typography>
+                <Tooltip title="Toggle Dark Mode">
+                    <IconButton onClick={handleDarkModeToggle} sx={{ color: darkMode ? '#fff' : '#000', transition: 'color 0.3s' }}>
+                        {darkMode ? <FaSun size={24} /> : <FaMoon size={24} />}
+                    </IconButton>
+                </Tooltip>
+            </Box>
 
-            {/* Dashboard Widgets */}
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={3}>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+            <Grid container spacing={4}>
+                {/* Overview Cards */}
+                <Grid item xs={12} md={4}>
+                    <animated.div style={animationProps}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                             <CardContent>
-                                <Typography variant="h6" color="textSecondary">
-                                    Users
-                                </Typography>
-                                <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                                    1,234
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <FaUserAlt size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                    <Typography variant="h6" sx={{ ml: 2 }}>
+                                        Active Users
+                                    </Typography>
+                                </Box>
+                                <Typography variant="h4" sx={{ mt: 2 }}>450</Typography>
                             </CardContent>
-                            <IconButton sx={{ color: '#3f51b5' }}>
-                                <FaUsers size={30} />
-                            </IconButton>
                         </Card>
-                    </motion.div>
+                    </animated.div>
                 </Grid>
-
-                <Grid item xs={12} sm={6} md={3}>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+                <Grid item xs={12} md={4}>
+                    <animated.div style={animationProps}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                             <CardContent>
-                                <Typography variant="h6" color="textSecondary">
-                                    Revenue
-                                </Typography>
-                                <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                                    $12,345
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <FaDollarSign size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                    <Typography variant="h6" sx={{ ml: 2 }}>
+                                        Total Revenue
+                                    </Typography>
+                                </Box>
+                                <Typography variant="h4" sx={{ mt: 2 }}>$1,200</Typography>
                             </CardContent>
-                            <IconButton sx={{ color: '#3f51b5' }}>
-                                <FaDollarSign size={30} />
-                            </IconButton>
                         </Card>
-                    </motion.div>
+                    </animated.div>
                 </Grid>
-
-                <Grid item xs={12} sm={6} md={3}>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                    >
-                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+                <Grid item xs={12} md={4}>
+                    <animated.div style={animationProps}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                             <CardContent>
-                                <Typography variant="h6" color="textSecondary">
-                                    Appointments
-                                </Typography>
-                                <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                                    567
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <FaCalendarAlt size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                    <Typography variant="h6" sx={{ ml: 2 }}>
+                                        New Bookings
+                                    </Typography>
+                                </Box>
+                                <Typography variant="h4" sx={{ mt: 2 }}>25</Typography>
                             </CardContent>
-                            <IconButton sx={{ color: '#3f51b5' }}>
-                                <FaCalendar size={30} />
-                            </IconButton>
                         </Card>
-                    </motion.div>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={3}>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.6 }}
-                    >
-                        <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
-                            <CardContent>
-                                <Typography variant="h6" color="textSecondary">
-                                    Settings
-                                </Typography>
-                            </CardContent>
-                            <IconButton sx={{ color: '#3f51b5' }}>
-                                <FaCog size={30} />
-                            </IconButton>
-                        </Card>
-                    </motion.div>
+                    </animated.div>
                 </Grid>
             </Grid>
 
-            {/* Chart Section */}
-            <Box sx={{ mt: 4 }}>
-                <Typography variant="h5" gutterBottom>
-                    Sales Overview
-                </Typography>
-                <Paper elevation={3} sx={{ p: 3 }}>
-                    <Line data={data} options={{ responsive: true, plugins: { legend: { display: false } } }} />
-                </Paper>
-            </Box>
+            <Grid container spacing={4} mt={4}>
+                {/* Line Chart */}
+                <Grid item xs={12} md={6}>
+                    <animated.div style={animationProps}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff' }}>
+                            <CardContent>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <FaChartLine size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                    <Typography variant="h6" sx={{ ml: 2 }}>
+                                        Monthly Rentals
+                                    </Typography>
+                                </Box>
+                                <Line data={lineChartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.dataset.label}: ${tooltipItem.formattedValue}` } } } }} />
+                            </CardContent>
+                        </Card>
+                    </animated.div>
+                </Grid>
 
-            {/* Actions Section */}
-            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="h5">
-                    Recent Activities
-                </Typography>
-                <IconButton>
-                    <MdKeyboardArrowDown />
-                </IconButton>
-            </Box>
+                {/* Bar Chart */}
+                <Grid item xs={12} md={6}>
+                    <animated.div style={animationProps}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff' }}>
+                            <CardContent>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <FaBox size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                    <Typography variant="h6" sx={{ ml: 2 }}>
+                                        Rentals by Region
+                                    </Typography>
+                                </Box>
+                                <Bar data={barChartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.dataset.label}: ${tooltipItem.formattedValue}` } } } }} />
+                            </CardContent>
+                        </Card>
+                    </animated.div>
+                </Grid>
+            </Grid>
 
-            <Box sx={{ mt: 2 }}>
-                <Paper elevation={3} sx={{ p: 2 }}>
-                    <Typography variant="body1">
-                        User John Doe updated profile settings.
-                    </Typography>
-                    <Divider sx={{ my: 1 }} />
-                    <Typography variant="body1">
-                        Revenue report generated for Q2.
-                    </Typography>
-                    <Divider sx={{ my: 1 }} />
-                    <Typography variant="body1">
-                        New appointment scheduled with client.
-                    </Typography>
-                </Paper>
-            </Box>
+            <Grid container spacing={4} mt={4}>
+                {/* Pie Chart */}
+                <Grid item xs={12}>
+                    <animated.div style={animationProps}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff' }}>
+                            <CardContent>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <FaCog size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                    <Typography variant="h6" sx={{ ml: 2 }}>
+                                        Vehicle Types
+                                    </Typography>
+                                </Box>
+                                <Pie data={pieChartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.label}: ${tooltipItem.formattedValue}` } } } }} />
+                            </CardContent>
+                        </Card>
+                    </animated.div>
+                </Grid>
+            </Grid>
 
-            {/* Logout Section */}
-            <Box sx={{ mt: 4, textAlign: 'right' }}>
-                <IconButton color="error">
-                    <FaPowerOff size={24} />
-                </IconButton>
-            </Box>
+            {/* Recent Activities */}
+            <Grid container spacing={4} mt={4}>
+                <Grid item xs={12}>
+                    <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff' }}>
+                        <CardContent>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <FaBell size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                <Typography variant="h6" sx={{ ml: 2 }}>
+                                    Recent Activities
+                                </Typography>
+                            </Box>
+                            <Divider sx={{ mb: 2 }} />
+                            <Box>
+                                <Typography variant="body2" gutterBottom>
+                                    🚀 New vehicle added to the fleet!
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                    🛠️ Maintenance scheduled for August 20.
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                    💬 User feedback received.
+                                </Typography>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
         </Box>
     );
 };
