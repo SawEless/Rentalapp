@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Typography, Grid, Card, CardContent, Divider, IconButton, Tooltip } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, Tooltip, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import { Line, Bar, Pie } from 'react-chartjs-2';
 import { useSpring, animated } from 'react-spring';
-import { FaChartLine, FaUserAlt, FaCog, FaDollarSign, FaCalendarAlt, FaBox, FaBell, FaSun, FaMoon } from 'react-icons/fa';
+import { FaChartLine, FaUserAlt, FaDollarSign, FaCalendarAlt, FaBox, FaSun, FaMoon, FaChartPie } from 'react-icons/fa';
 import { Chart as ChartJS, Title, Tooltip as ChartTooltip, Legend, LineElement, BarElement, PointElement, CategoryScale, LinearScale, ArcElement } from 'chart.js';
 
 // Register Chart.js components
@@ -65,6 +65,8 @@ const useAnimation = () => useSpring({
 const DashboardPage = () => {
     const [darkMode, setDarkMode] = useState(false);
     const animationProps = useAnimation();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     const handleDarkModeToggle = () => {
         setDarkMode(prevMode => !prevMode);
@@ -77,7 +79,7 @@ const DashboardPage = () => {
                     Dashboard
                 </Typography>
                 <Tooltip title="Toggle Dark Mode">
-                    <IconButton onClick={handleDarkModeToggle} sx={{ color: darkMode ? '#fff' : '#000', transition: 'color 0.3s' }}>
+                    <IconButton onClick={handleDarkModeToggle} sx={{ color: darkMode ? '#fff' : '#000' }}>
                         {darkMode ? <FaSun size={24} /> : <FaMoon size={24} />}
                     </IconButton>
                 </Tooltip>
@@ -87,7 +89,7 @@ const DashboardPage = () => {
                 {/* Overview Cards */}
                 <Grid item xs={12} md={4}>
                     <animated.div style={animationProps}>
-                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': { transform: 'scale(1.05)', boxShadow: 6 } }}>
                             <CardContent>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <FaUserAlt size={30} color={darkMode ? '#e0e0e0' : '#000'} />
@@ -102,7 +104,7 @@ const DashboardPage = () => {
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <animated.div style={animationProps}>
-                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': { transform: 'scale(1.05)', boxShadow: 6 } }}>
                             <CardContent>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <FaDollarSign size={30} color={darkMode ? '#e0e0e0' : '#000'} />
@@ -117,7 +119,7 @@ const DashboardPage = () => {
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <animated.div style={animationProps}>
-                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
+                        <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff', transition: 'transform 0.3s, box-shadow 0.3s', '&:hover': { transform: 'scale(1.05)', boxShadow: 6 } }}>
                             <CardContent>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <FaCalendarAlt size={30} color={darkMode ? '#e0e0e0' : '#000'} />
@@ -144,7 +146,16 @@ const DashboardPage = () => {
                                         Monthly Rentals
                                     </Typography>
                                 </Box>
-                                <Line data={lineChartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.dataset.label}: ${tooltipItem.formattedValue}` } } } }} />
+                                <Line 
+                                    data={lineChartData} 
+                                    options={{ 
+                                        responsive: true, 
+                                        plugins: { 
+                                            legend: { position: 'top' }, 
+                                            tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.dataset.label}: ${tooltipItem.formattedValue}` } } 
+                                        } 
+                                    }} 
+                                />
                             </CardContent>
                         </Card>
                     </animated.div>
@@ -161,7 +172,16 @@ const DashboardPage = () => {
                                         Rentals by Region
                                     </Typography>
                                 </Box>
-                                <Bar data={barChartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.dataset.label}: ${tooltipItem.formattedValue}` } } } }} />
+                                <Bar 
+                                    data={barChartData} 
+                                    options={{ 
+                                        responsive: true, 
+                                        plugins: { 
+                                            legend: { position: 'top' }, 
+                                            tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.dataset.label}: ${tooltipItem.formattedValue}` } } 
+                                        } 
+                                    }} 
+                                />
                             </CardContent>
                         </Card>
                     </animated.div>
@@ -175,43 +195,24 @@ const DashboardPage = () => {
                         <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff' }}>
                             <CardContent>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <FaCog size={30} color={darkMode ? '#e0e0e0' : '#000'} />
+                                    <FaChartPie size={30} color={darkMode ? '#e0e0e0' : '#000'} />
                                     <Typography variant="h6" sx={{ ml: 2 }}>
                                         Vehicle Types
                                     </Typography>
                                 </Box>
-                                <Pie data={pieChartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.label}: ${tooltipItem.formattedValue}` } } } }} />
+                                <Pie 
+                                    data={pieChartData} 
+                                    options={{ 
+                                        responsive: true, 
+                                        plugins: { 
+                                            legend: { position: 'top' }, 
+                                            tooltip: { callbacks: { label: (tooltipItem) => ` ${tooltipItem.label}: ${tooltipItem.raw}` } } 
+                                        } 
+                                    }} 
+                                />
                             </CardContent>
                         </Card>
                     </animated.div>
-                </Grid>
-            </Grid>
-
-            {/* Recent Activities */}
-            <Grid container spacing={4} mt={4}>
-                <Grid item xs={12}>
-                    <Card sx={{ padding: 2, borderRadius: 2, boxShadow: 3, backgroundColor: darkMode ? '#333' : '#fff' }}>
-                        <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <FaBell size={30} color={darkMode ? '#e0e0e0' : '#000'} />
-                                <Typography variant="h6" sx={{ ml: 2 }}>
-                                    Recent Activities
-                                </Typography>
-                            </Box>
-                            <Divider sx={{ mb: 2 }} />
-                            <Box>
-                                <Typography variant="body2" gutterBottom>
-                                    🚀 New vehicle added to the fleet!
-                                </Typography>
-                                <Typography variant="body2" gutterBottom>
-                                    🛠️ Maintenance scheduled for August 20.
-                                </Typography>
-                                <Typography variant="body2" gutterBottom>
-                                    💬 User feedback received.
-                                </Typography>
-                            </Box>
-                        </CardContent>
-                    </Card>
                 </Grid>
             </Grid>
         </Box>

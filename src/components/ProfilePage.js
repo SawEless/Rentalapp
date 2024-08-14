@@ -35,6 +35,13 @@ const createAppTheme = (darkMode, themeColor) => createTheme({
                 },
             },
         },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '20px',
+                },
+            },
+        },
     },
 });
 
@@ -56,12 +63,13 @@ const ProfilePage = () => {
             <Box
                 sx={{
                     padding: 4,
-                    maxWidth: 1000,
+                    maxWidth: 1200,
                     margin: '0 auto',
+                    backgroundColor: theme.palette.background.default,
                 }}
             >
                 {/* Dark Mode and Theme Color */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                     <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
                     <FormControl sx={{ minWidth: 120 }}>
                         <InputLabel id="theme-color-label">Theme Color</InputLabel>
@@ -82,17 +90,17 @@ const ProfilePage = () => {
                 {/* Profile Completion Tracker */}
                 <Paper sx={{ mb: 3 }}>
                     <Box sx={{ p: 2 }}>
-                        <Typography variant="h6">
+                        <Typography variant="h6" gutterBottom>
                             Profile Completion
                         </Typography>
-                        <LinearProgress variant="determinate" value={profileCompletion} sx={{ mt: 2 }} />
+                        <LinearProgress variant="determinate" value={profileCompletion} sx={{ mt: 2, borderRadius: '10px' }} />
                         <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
                             {profileCompletion}% Complete
                         </Typography>
                     </Box>
                 </Paper>
 
-                <Paper>
+                <Paper sx={{ mb: 3 }}>
                     <Grid container spacing={3}>
                         {/* Profile Picture */}
                         <Grid item xs={12} md={4}>
@@ -152,7 +160,7 @@ const ProfilePage = () => {
                 <Grid container spacing={3}>
                     {/* Notification Settings */}
                     <Grid item xs={12} md={6}>
-                        <Paper>
+                        <Paper sx={{ p: 2 }}>
                             <Typography variant="h6" gutterBottom>
                                 <FaBell style={{ marginRight: 8 }} /> Notification Settings
                             </Typography>
@@ -175,7 +183,7 @@ const ProfilePage = () => {
 
                     {/* Privacy Settings */}
                     <Grid item xs={12} md={6}>
-                        <Paper>
+                        <Paper sx={{ p: 2 }}>
                             <Typography variant="h6" gutterBottom>
                                 <FaShieldAlt style={{ marginRight: 8 }} /> Privacy Settings
                             </Typography>
@@ -198,7 +206,7 @@ const ProfilePage = () => {
 
                     {/* AI Recommendations */}
                     <Grid item xs={12} md={6}>
-                        <Paper>
+                        <Paper sx={{ p: 2 }}>
                             <Typography variant="h6" gutterBottom>
                                 <FaChartLine style={{ marginRight: 8 }} /> AI Recommendations
                             </Typography>
@@ -215,7 +223,7 @@ const ProfilePage = () => {
 
                     {/* Activity Feed */}
                     <Grid item xs={12} md={6}>
-                        <Paper>
+                        <Paper sx={{ p: 2 }}>
                             <Typography variant="h6" gutterBottom>
                                 <FaSync style={{ marginRight: 8 }} /> Activity Feed
                             </Typography>
@@ -235,33 +243,35 @@ const ProfilePage = () => {
 
                     {/* Social Media Integration */}
                     <Grid item xs={12}>
-                        <Paper>
+                        <Paper sx={{ p: 2 }}>
                             <Typography variant="h6" gutterBottom>
                                 <FaUserFriends style={{ marginRight: 8 }} /> Social Media Integration
                             </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <IconButton color="primary" onClick={() => alert('LinkedIn integration coming soon!')}>
-                                    <FaLinkedin size={32} />
-                                </IconButton>
-                                <IconButton color="primary" onClick={() => alert('Twitter integration coming soon!')}>
-                                    <FaTwitter size={32} />
-                                </IconButton>
-                                <IconButton color="primary" onClick={() => alert('Facebook integration coming soon!')}>
-                                    <FaFacebook size={32} />
-                                </IconButton>
-                            </Box>
-                        </Paper>
-                    </Grid>
-
-                    {/* Profile Engagement Chart */}
-                    <Grid item xs={12}>
-                        <Paper>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
-                                <CircularProgress variant="determinate" value={75} size={80} />
-                                <Typography variant="body1" sx={{ ml: 2 }}>
-                                    Profile Engagement: 75%
-                                </Typography>
-                            </Box>
+                            <Typography variant="body1" sx={{ mb: 2 }}>
+                                Connect your profile with social media platforms:
+                            </Typography>
+                            <Grid container spacing={2}>
+                                <Grid item>
+                                    <IconButton color="primary" href="https://www.linkedin.com" target="_blank">
+                                        <FaLinkedin />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item>
+                                    <IconButton color="primary" href="https://twitter.com" target="_blank">
+                                        <FaTwitter />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item>
+                                    <IconButton color="primary" href="https://www.facebook.com" target="_blank">
+                                        <FaFacebook />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item>
+                                    <IconButton color="primary" href="https://www.instagram.com" target="_blank">
+                                        <FaUserCheck />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
                         </Paper>
                     </Grid>
                 </Grid>

@@ -1,0 +1,28 @@
+/* Example button animation */
+button {
+    transition: transform 0.3s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Example section fade-in */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.section {
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Example text color change */
+@keyframes colorChange {
+    0% { color: var(--primary-color); }
+    100% { color: var(--secondary-color); }
+}
+
+.section h1 {
+    animation: colorChange 2s infinite alternate;
+}

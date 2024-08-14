@@ -1,0 +1,75 @@
+.booking-confirmation-container {
+    padding: 20px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    transition: background 0.5s, color 0.5s;
+}
+
+.booking-summary p {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.payment-options {
+    margin: 20px 0;
+}
+
+.payment-btn {
+    padding: 10px 20px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.payment-btn:hover {
+    background: var(--primary-color-dark);
+}
+
+.discount-code {
+    margin: 20px 0;
+}
+
+.discount-code input {
+    padding: 10px;
+    width: calc(100% - 100px);
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-color);
+}
+
+.apply-btn {
+    padding: 10px 20px;
+    background: var(--secondary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.apply-btn:hover {
+    background: var(--secondary-color-dark);
+}
+
+.confirm-booking-btn {
+    padding: 15px 30px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 20px;
+}
+
+.confirm-booking-btn:hover {
+    background: var(--primary-color-dark);
+}
