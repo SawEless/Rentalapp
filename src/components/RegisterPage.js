@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, InputAdornment, CircularProgress } from '@mui/material';
+import { TextField, Button, Box, Typography, InputAdornment, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Email, Lock, Person, LocationOn, Phone, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
@@ -15,11 +15,16 @@ const RegisterPage = () => {
         location: '',
         password: '',
         confirmPassword: '',
+        agreeToTerms: false,
     });
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleCheckboxChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.checked });
     };
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -29,10 +34,13 @@ const RegisterPage = () => {
         const newErrors = {};
         if (!formData.name) newErrors.name = 'Name is required';
         if (!formData.email) newErrors.email = 'Email is required';
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
         if (!formData.phone) newErrors.phone = 'Phone number is required';
+        else if (!/^\d{10}$/.test(formData.phone)) newErrors.phone = 'Phone number must be 10 digits';
         if (!formData.location) newErrors.location = 'Location is required';
         if (!formData.password) newErrors.password = 'Password is required';
         if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+        if (!formData.agreeToTerms) newErrors.agreeToTerms = 'You must agree to the terms and conditions';
         return newErrors;
     };
 
@@ -265,9 +273,9 @@ const RegisterPage = () => {
                         variant="outlined"
                         fullWidth
                         margin="normal"
-                        type={showPassword ? 'text' : 'password'}
                         placeholder="Password"
                         name="password"
+                        type={showPassword ? 'text' : 'password'}
                         value={formData.password}
                         onChange={handleChange}
                         error={!!errors.password}
@@ -280,22 +288,9 @@ const RegisterPage = () => {
                             ),
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <motion.div
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                    >
-                                        {showPassword ? (
-                                            <VisibilityOff
-                                                style={{ cursor: 'pointer', color: '#3f51b5' }}
-                                                onClick={handleClickShowPassword}
-                                            />
-                                        ) : (
-                                            <Visibility
-                                                style={{ cursor: 'pointer', color: '#3f51b5' }}
-                                                onClick={handleClickShowPassword}
-                                            />
-                                        )}
-                                    </motion.div>
+                                    <Button onClick={handleClickShowPassword} edge="end">
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </Button>
                                 </InputAdornment>
                             ),
                         }}
@@ -322,9 +317,9 @@ const RegisterPage = () => {
                         variant="outlined"
                         fullWidth
                         margin="normal"
-                        type={showConfirmPassword ? 'text' : 'password'}
                         placeholder="Confirm Password"
                         name="confirmPassword"
+                        type={showConfirmPassword ? 'text' : 'password'}
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         error={!!errors.confirmPassword}
@@ -337,22 +332,9 @@ const RegisterPage = () => {
                             ),
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <motion.div
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                    >
-                                        {showConfirmPassword ? (
-                                            <VisibilityOff
-                                                style={{ cursor: 'pointer', color: '#3f51b5' }}
-                                                onClick={handleClickShowConfirmPassword}
-                                            />
-                                        ) : (
-                                            <Visibility
-                                                style={{ cursor: 'pointer', color: '#3f51b5' }}
-                                                onClick={handleClickShowConfirmPassword}
-                                            />
-                                        )}
-                                    </motion.div>
+                                    <Button onClick={handleClickShowConfirmPassword} edge="end">
+                                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                    </Button>
                                 </InputAdornment>
                             ),
                         }}
@@ -369,45 +351,55 @@ const RegisterPage = () => {
                     />
                 </motion.div>
 
-                {/* Register Button */}
+                {/* Terms and Conditions */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.7 }}
                 >
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={formData.agreeToTerms}
+                                onChange={handleCheckboxChange}
+                                name="agreeToTerms"
+                                color="primary"
+                            />
+                        }
+                        label="I agree to the terms and conditions"
+                        sx={{ marginBottom: 2 }}
+                    />
+                    {errors.agreeToTerms && (
+                        <Typography color="error" variant="body2" align="center" sx={{ marginBottom: 2 }}>
+                            {errors.agreeToTerms}
+                        </Typography>
+                    )}
+                </motion.div>
+
+                {/* Submit Button */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                >
                     <Button
                         variant="contained"
                         color="primary"
                         fullWidth
-                        sx={{
-                            marginTop: '20px',
-                            padding: '10px 0',
-                            borderRadius: '25px',
-                            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.1)',
-                            backgroundColor: '#3f51b5',
-                            '&:hover': {
-                                backgroundColor: '#283593',
-                            },
-                        }}
                         onClick={handleRegister}
                         disabled={loading}
+                        sx={{ padding: '10px', borderRadius: '8px' }}
                     >
-                        {loading ? <CircularProgress size={24} style={{ color: '#ffffff' }} /> : 'Register'}
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Register'}
                     </Button>
                 </motion.div>
 
-                {/* Already have an account? */}
-                <Typography
-                    variant="body2"
-                    align="center"
-                    color="textSecondary"
-                    marginTop={2}
-                >
-                    Already have an account?{' '}
-                    <Link to="/login" style={{ color: '#3f51b5', textDecoration: 'none' }}>
-                        Login here
-                    </Link>
-                </Typography>
+                {/* Login Link */}
+                <Box marginTop={2} textAlign="center">
+                    <Typography variant="body2" color="textSecondary">
+                        Already have an account? <Link to="/login">Login here</Link>
+                    </Typography>
+                </Box>
             </motion.div>
         </Box>
     );

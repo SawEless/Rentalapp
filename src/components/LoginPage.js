@@ -80,11 +80,6 @@ const LoginPage = () => {
                     InputLabelProps={{
                         style: { color: '#3f51b5' },
                     }}
-                    sx={{ 
-                        '& .MuiOutlinedInput-root': {
-                            transition: 'border-color 0.3s',
-                        },
-                    }}
                 />
                 <TextField
                     variant="outlined"

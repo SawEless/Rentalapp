@@ -87,7 +87,7 @@ const AboutUsPage = () => {
                 transition={{ duration: 1 }}
                 style={{ marginBottom: '60px' }}
             >
-                <Typography variant="h2" gutterBottom sx={{ fontWeight: 700 }}>
+                <Typography variant="h2" gutterBottom sx={{ fontWeight: 700, mb: 2 }}>
                     About Us
                 </Typography>
                 <Typography variant="h6" paragraph sx={{ maxWidth: '700px', margin: '0 auto', color: '#666' }}>
@@ -98,7 +98,7 @@ const AboutUsPage = () => {
             {/* Features Section */}
             <Grid container spacing={4} sx={{ maxWidth: '1200px', marginBottom: '60px' }}>
                 {features.map((feature, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
+                    <Grid item xs={12} sm={6} md={4} key={index}>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -125,7 +125,7 @@ const AboutUsPage = () => {
                             >
                                 {feature.icon}
                             </IconButton>
-                            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
                                 {feature.title}
                             </Typography>
                             <Typography variant="body2" sx={{ color: '#666' }}>
